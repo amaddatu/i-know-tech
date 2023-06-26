@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { Project, User } = require('../models');
 const withAuth = require('../utils/auth');
+const { search } = require('../utils/giphy-api');
 const { getQuote } = require('../utils/quote-api');
 
 
@@ -92,6 +93,48 @@ router.get('/get-quote', async (req, res) => {
 
     res.render('get-quote', {
       quoteData: quoteData
+    });
+  }
+  catch(err){
+    console.log(err);
+    res.json({
+      message: "You know there was a error right?"
+    });
+  }
+});
+
+router.get('/giphySearch', async (req, res) => {
+  try{
+    
+    console.log("--------");
+    console.log("giphysearch");
+    console.log("--------");
+
+    res.render('giphySearch');
+  }
+  catch(err){
+    console.log(err);
+    res.json({
+      message: "You know there was a error right?"
+    });
+  }
+});
+
+router.get('/giphySearch/:searchTerm', async (req, res) => {
+  try{
+    const response = await search(req.params.searchTerm);
+    let giphyData = response.data.data;
+    giphyData = giphyData.map( imageItem => ({
+      alt: imageItem.title,
+      url: imageItem.images.fixed_height.url 
+    }));
+    console.log("--------");
+    // console.log(JSON.stringify(response.data, null, 2));
+    console.log(giphyData);
+    console.log("--------");
+
+    res.render('giphySearch', {
+      giphyData
     });
   }
   catch(err){
