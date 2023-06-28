@@ -145,4 +145,8 @@ router.get('/giphySearch/:searchTerm', async (req, res) => {
   }
 });
 
+router.get('/game-page', (req, res) => {
+  return res.render('game');
+});
+
 module.exports = router;
