@@ -19,33 +19,38 @@ router.get('/', async (req, res) => {
           through: UserReaction,
           as: 'project_reactions',
           include: [ {
-            
+            model: User,
+            through: UserReaction,
+            as: 'reactions_from_user'
           }]
         },
       ],
     });
 
-    const userData = await User.findAll();
+    // // not required if using a better relational join
+    // const userData = await User.findAll();
 
     // Serialize data so the template can read it
     const projects = projectData.map((project) => project.get({ plain: true }));
-    const users = userData.map((user) => user.get({ plain: true }));
 
-    projects.map(project => {
-      project.project_reactions = project.project_reactions.map(pr => {
-        const user_id = pr.user_reaction.user_id;
-        const user_name = users.filter(user => user.id === user_id)[0];
-        if (pr.users) {
-          pr.users.push(user_name);
-        }
-        else {
-          pr.users = [];
-          pr.users.push(user_name);
-        }
-        return pr;
-      });
-      return project;
-    });
+    // // not required if using a better relational join
+    // const users = userData.map((user) => user.get({ plain: true }));
+
+    // projects.map(project => {
+    //   project.project_reactions = project.project_reactions.map(pr => {
+    //     const user_id = pr.user_reaction.user_id;
+    //     const user_name = users.filter(user => user.id === user_id)[0];
+    //     if (pr.users) {
+    //       pr.users.push(user_name);
+    //     }
+    //     else {
+    //       pr.users = [];
+    //       pr.users.push(user_name);
+    //     }
+    //     return pr;
+    //   });
+    //   return project;
+    // });
 
     console.log(JSON.stringify(projects, null, 2));
     // Pass serialized data and session flag into template
