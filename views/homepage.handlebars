@@ -14,6 +14,14 @@
       needed!
     </p>
     <p>Created by {{project.user.name}} on {{format_date project.date_created}}</p>
+    {{!-- <p>😋 from Anthony</p> --}}
+    {{#each project_reactions as |project_reaction| }}
+      <p>{{emoji}} from 
+      {{#each users as |reaction_user|}}
+        {{reaction_user.name}}, 
+      {{/each}}
+      </p>
+    {{/each}}
   </div>
   <div class="col-md-7">
     <p>
